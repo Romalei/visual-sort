@@ -17,5 +17,5 @@ You can:
     - speed
     - sorting algorithm
 
-![Visual Sort UI](/assets/visual_sort.jpg)
+![Visual Sort UI](/assets/visual_sort.gif)
 *UI screenshot*
