@@ -11,14 +11,6 @@ class SortAlgorithm {
     arr[a].swapWith(arr[b]);
   }
 
-  setTarget(arrayItem) {
-    arrayItem.setStatus(ARRAY_ITEM_STATUS.TARGET_OF_SWAP);
-  }
-
-  setSource(arrayItem) {
-    arrayItem.setStatus(ARRAY_ITEM_STATUS.SOURCE_OF_SWAP);
-  }
-
   reset(...arrayItems) {
     for (let i = 0; i < arrayItems.length; i++) {
       arrayItems[i].setStatus(ARRAY_ITEM_STATUS.IDLE);
@@ -51,14 +43,13 @@ class BubbleSort extends SortAlgorithm {
   async sort(arr, { interval, pauseWhen: isPaused, breakWhen: shouldBreak }) {
     for (let i = 0, n = arr.length; i < n - 1; ++i) {
       for (let j = 0; j < n - i - 1; ++j) {
-        this.setSource(arr[j]);
-        this.setTarget(arr[j + 1]);
+        arr[j].setStatus(ARRAY_ITEM_STATUS.ITERATEE);
 
         if (isPaused()) {
           await this.waitWhile(isPaused);
         }
 
-        await this.delay(interval);
+        await this.delay(interval());
 
         if (shouldBreak()) {
           return;
@@ -70,7 +61,11 @@ class BubbleSort extends SortAlgorithm {
 
         this.reset(arr[j], arr[j + 1]);
       }
+
+      arr[n - i - 1].setStatus(ARRAY_ITEM_STATUS.SORTED);
     }
+
+    arr[0].setStatus(ARRAY_ITEM_STATUS.SORTED);
   }
 }
 

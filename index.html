@@ -12,15 +12,41 @@
     <div class="root">
       <header class="toolbar-outer">
         <div class="container toolbar">
-          <label>
-            Array length
-            <input data-disable-while-sorting id="array_len_input" type="number" />
+          <input
+            data-disable-while-sorting
+            id="array_len_input"
+            type="number"
+          />
+          <label class="label">
+            <span>Array length</span>
+            <input
+              data-disable-while-sorting
+              id="array_len_range"
+              type="range"
+            />
           </label>
-          <input data-disable-while-sorting id="array_len_range" type="range" />
-          <button data-disable-while-sorting class="btn" id="generate_btn">Generate Array</button>
-          <select data-disable-while-sorting class="select" id="alg_select"></select>
+          <button data-disable-while-sorting class="btn" id="generate_btn">
+            Generate Array
+          </button>
+          <select
+            data-disable-while-sorting
+            class="select"
+            id="alg_select"
+          ></select>
+
+          <label class="label">
+            <span>Speed</span>
+            <input id="speed_range" type="range" />
+          </label>
           <button class="btn btn_action" id="start_btn">Start</button>
-          <button data-enable-while-sorting disabled class="btn btn_action" id="stop_btn">Stop</button>
+          <button
+            data-enable-while-sorting
+            disabled
+            class="btn btn_action"
+            id="stop_btn"
+          >
+            Stop
+          </button>
         </div>
       </header>
 

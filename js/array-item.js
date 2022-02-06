@@ -1,13 +1,13 @@
 const ARRAY_ITEM_STATUS = {
   IDLE: 1,
-  SOURCE_OF_SWAP: 2,
-  TARGET_OF_SWAP: 3,
+  ITERATEE: 2,
+  SORTED: 3,
 };
 
 const STATUS_CLASS_MAP = {
   [ARRAY_ITEM_STATUS.IDLE]: [],
-  [ARRAY_ITEM_STATUS.SOURCE_OF_SWAP]: ['array__item_source'],
-  [ARRAY_ITEM_STATUS.TARGET_OF_SWAP]: ['array__item_target'],
+  [ARRAY_ITEM_STATUS.ITERATEE]: ['array__item_iteratee'],
+  [ARRAY_ITEM_STATUS.SORTED]: ['array__item_sorted'],
 };
 
 class ArrayItem {

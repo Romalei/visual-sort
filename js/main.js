@@ -9,8 +9,8 @@ const $id = document.getElementById.bind(document);
 
 const ALGS = {
   1: new BubbleSort(),
-//   2: new QuickSort(),
-//   3: new HeapSort(),
+  //   2: new QuickSort(),
+  //   3: new HeapSort(),
 };
 
 // Toolbar controls
@@ -18,6 +18,7 @@ const ARRAY_LEN_INPUT = $id('array_len_input');
 const ARRAY_LEN_RANGE = $id('array_len_range');
 const GENERATE_BTN = $id('generate_btn');
 const ALG_SELECTOR = $id('alg_select');
+const SPEED_RANGE = $id('speed_range');
 const START_BTN = $id('start_btn');
 const STOP_BTN = $id('stop_btn');
 
@@ -27,12 +28,19 @@ const ARRAY_CONTAINER = $id('array_container');
 const STATE = {
   minLength: 5,
   maxLength: 100,
-  arrayLength: 100,
+  arrayLength: 50,
   sortInProgress: false,
   array: [],
   minValue: 0,
   maxValue: 100,
   paused: false,
+  freshArray: true,
+  speed: {
+    value: 250,
+    min: 1,
+    max: 500,
+    step: 1,
+  },
 };
 
 function rnd(min, max) {
@@ -52,14 +60,14 @@ ARRAY_LEN_INPUT.value = STATE.arrayLength;
 ARRAY_LEN_RANGE.value = STATE.arrayLength;
 
 ARRAY_LEN_INPUT.addEventListener('input', (e) => {
-  ARRAY_LEN_RANGE.value = e.target.value;
-  STATE.arrayLength = e.target.value;
+  ARRAY_LEN_RANGE.value = e.target.valueAsNumber;
+  STATE.arrayLength = e.target.valueAsNumber;
   generateArray();
 });
 
 ARRAY_LEN_RANGE.addEventListener('input', (e) => {
-  ARRAY_LEN_INPUT.value = e.target.value;
-  STATE.arrayLength = e.target.value;
+  ARRAY_LEN_INPUT.value = e.target.valueAsNumber;
+  STATE.arrayLength = e.target.valueAsNumber;
   generateArray();
 });
 
@@ -84,6 +92,8 @@ function generateArray(length = STATE.arrayLength) {
       })
     );
   }
+
+  STATE.freshArray = true;
 }
 
 // Algorithm select
@@ -114,7 +124,30 @@ START_BTN.addEventListener('click', () => {
   pause();
 });
 
+// Stop button
+STOP_BTN.addEventListener('click', async () => {
+  await stop();
+  generateArray();
+});
+
+// Speed range
+SPEED_RANGE.setAttribute('min', STATE.speed.min);
+SPEED_RANGE.setAttribute('max', STATE.speed.max);
+SPEED_RANGE.setAttribute('step', STATE.speed.step);
+SPEED_RANGE.setAttribute('value', STATE.speed.value);
+
+SPEED_RANGE.addEventListener('input', (e) => {
+  STATE.speed.value = e.target.valueAsNumber;
+});
+
+// Event handlers
 async function start() {
+  if (!STATE.freshArray) {
+    generateArray();
+  }
+
+  STATE.freshArray = false;
+
   const elementsToDisable = $$('[data-disable-while-sorting]');
   const elementsToEnable = $$('[data-enable-while-sorting]');
 
@@ -134,7 +167,7 @@ async function start() {
   const alg = ALGS[algId];
 
   await alg.sort(STATE.array, {
-    interval: 0,
+    interval: () => 1000 / STATE.speed.value,
     pauseWhen: () => STATE.paused,
     breakWhen: () => !STATE.sortInProgress,
   });
@@ -151,11 +184,6 @@ async function unpause() {
   STATE.paused = false;
   START_BTN.textContent = 'Pause';
 }
-
-STOP_BTN.addEventListener('click', async () => {
-  await stop();
-  generateArray();
-});
 
 async function stop() {
   const elementsToDisable = $$('[data-disable-while-sorting]');
