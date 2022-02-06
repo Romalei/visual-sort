@@ -3,6 +3,10 @@
     https://www.geeksforgeeks.org/sorting-algorithms/
 */
 // 1. Prerequisites
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+const $id = document.getElementById.bind(document);
+
 const ALGS = {
   1: new BubbleSort(),
   2: new QuickSort(),
@@ -10,15 +14,15 @@ const ALGS = {
 };
 
 // Toolbar controls
-const ARRAY_LEN_INPUT = document.getElementById('array_len_input');
-const ARRAY_LEN_RANGE = document.getElementById('array_len_range');
-const GENERATE_BTN = document.getElementById('generate_btn');
-const ALG_SELECTOR = document.getElementById('alg_select');
-const START_BTN = document.getElementById('start_btn');
-const STOP_BTN = document.getElementById('stop_btn');
+const ARRAY_LEN_INPUT = $id('array_len_input');
+const ARRAY_LEN_RANGE = $id('array_len_range');
+const GENERATE_BTN = $id('generate_btn');
+const ALG_SELECTOR = $id('alg_select');
+const START_BTN = $id('start_btn');
+const STOP_BTN = $id('stop_btn');
 
 // Array
-const ARRAY_CONTAINER = document.getElementById('array_container');
+const ARRAY_CONTAINER = $id('array_container');
 
 const STATE = {
   minLength: 5,
@@ -111,18 +115,15 @@ START_BTN.addEventListener('click', () => {
 });
 
 async function start() {
-  if (STATE.sortInProgress) {
-    pause();
-
-    return;
-  }
-
-  const elementsToDisable = document.querySelectorAll(
-    '[data-disable-while-sorting]'
-  );
+  const elementsToDisable = $$('[data-disable-while-sorting]');
+  const elementsToEnable = $$('[data-enable-while-sorting]');
 
   elementsToDisable.forEach((element) => {
     element.toggleAttribute('disabled', true);
+  });
+
+  elementsToEnable.forEach((element) => {
+    element.removeAttribute('disabled');
   });
 
   START_BTN.textContent = 'Pause';
@@ -135,12 +136,10 @@ async function start() {
   await alg.sort(STATE.array, {
     interval: 0,
     pauseWhen: () => STATE.paused,
+    breakWhen: () => !STATE.sortInProgress,
   });
 
-  elementsToDisable.forEach((element) => {
-    element.removeAttribute('disabled');
-  });
-  START_BTN.textContent = 'Start';
+  stop();
 }
 
 async function pause() {
@@ -153,8 +152,33 @@ async function unpause() {
   START_BTN.textContent = 'Pause';
 }
 
+STOP_BTN.addEventListener('click', async () => {
+  await stop();
+  generateArray();
+});
+
 async function stop() {
-    // todo:
+  const elementsToDisable = $$('[data-disable-while-sorting]');
+  const elementsToEnable = $$('[data-enable-while-sorting]');
+
+  STATE.paused = false;
+  STATE.sortInProgress = false;
+
+  START_BTN.textContent = 'Start';
+
+  elementsToDisable.forEach((element) => {
+    element.removeAttribute('disabled');
+  });
+
+  elementsToEnable.forEach((element) => {
+    element.toggleAttribute('disabled', true);
+  });
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 100);
+  });
 }
 
 // ===
