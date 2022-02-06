@@ -87,7 +87,7 @@ function generateArray(length = STATE.arrayLength) {
       new ArrayItem({
         value,
         container: ARRAY_CONTAINER,
-        h: (value * 97) / STATE.maxValue + 3,
+        h: (value * 95) / STATE.maxValue + 5,
         w: 100 / STATE.arrayLength,
       })
     );
