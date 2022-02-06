@@ -9,8 +9,8 @@ const $id = document.getElementById.bind(document);
 
 const ALGS = {
   1: new BubbleSort(),
-  2: new QuickSort(),
-  3: new HeapSort(),
+//   2: new QuickSort(),
+//   3: new HeapSort(),
 };
 
 // Toolbar controls
