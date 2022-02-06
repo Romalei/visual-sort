@@ -85,6 +85,10 @@ body {
 }
 
 /* Buttons */
+button:disabled {
+  opacity: 0.75;
+}
+
 .btn {
   padding: 0.5rem 0.75rem;
   background-color: var(--accent);
@@ -93,15 +97,15 @@ body {
   border: 0;
 }
 
-.btn:hover {
+.btn:not(:disabled):hover {
   filter: brightness(120%);
 }
 
-.btn:active {
+.btn:not(:disabled):active {
   filter: brightness(90%);
 }
 
-.btn_start {
+.btn_action {
   text-transform: uppercase;
   background-color: transparent;
   color: var(--primary);
@@ -110,16 +114,16 @@ body {
   letter-spacing: 0.15rem;
   font-family: var(--mono-font-family);
   transition: transform 0.1s;
-  padding: 0.375rem .75rem;
+  padding: 0.375rem 0.75rem;
 }
 
-.btn_start:hover {
+.btn_action:not(:disabled):hover {
   filter: brightness(100%);
   background-color: var(--primary);
   color: var(--accent);
 }
 
-.btn_start:active {
+.btn_action:not(:disabled):active {
   transform: scale(0.8);
 }
 
@@ -132,10 +136,10 @@ body {
   border: 0;
 }
 
-.select:hover {
+.select:not(:disabled):hover {
   filter: brightness(120%);
 }
 
-.select:active {
+.select:not(:disabled):active {
   filter: brightness(90%);
 }
