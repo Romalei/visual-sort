@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sorting algorithms visualization</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <div class="root">
-        <header class="toolbar">
-            <div class="container">
-                <label>
-                    Array length
-                    <input id="array_len_input" type="number">
-                </label>
-                <input id="array_len_range" type="range">
-                <button id="generate_btn">Generate Array</button>
-                <select id="alg_select"></select>
-                <button id="start_btn">Start</button>
-            </div>
-        </header>
+      <header class="toolbar-outer">
+        <div class="container toolbar">
+          <label>
+            Array length
+            <input id="array_len_input" type="number" />
+          </label>
+          <input id="array_len_range" type="range" />
+          <button class="btn" id="generate_btn">Generate Array</button>
+          <select class="select" id="alg_select"></select>
+          <button class="btn btn_start" id="start_btn">Start</button>
+        </div>
+      </header>
 
-        <main class="main">
-            <div id="array_container" class="array"></div>
-        </main>
+      <main class="main">
+        <div id="array_container" class="array"></div>
+      </main>
     </div>
 
     <script src="js/array-item.js"></script>
     <script src="js/algorithm.js"></script>
     <script src="js/main.js"></script>
-</body>
+  </body>
 </html>
