@@ -34,7 +34,7 @@ const STATE = {
   minValue: 0,
   maxValue: 100,
   paused: false,
-  freshArray: true,
+  freshArray: false,
   speed: {
     value: 250,
     min: 1,
@@ -126,7 +126,7 @@ START_BTN.addEventListener('click', () => {
 
 // Stop button
 STOP_BTN.addEventListener('click', async () => {
-  await stop();
+  stop();
   generateArray();
 });
 
@@ -175,17 +175,17 @@ async function start() {
   stop();
 }
 
-async function pause() {
+function pause() {
   STATE.paused = true;
   START_BTN.textContent = 'Continue';
 }
 
-async function unpause() {
+function unpause() {
   STATE.paused = false;
   START_BTN.textContent = 'Pause';
 }
 
-async function stop() {
+function stop() {
   const elementsToDisable = $$('[data-disable-while-sorting]');
   const elementsToEnable = $$('[data-enable-while-sorting]');
 
@@ -200,12 +200,6 @@ async function stop() {
 
   elementsToEnable.forEach((element) => {
     element.toggleAttribute('disabled', true);
-  });
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 100);
   });
 }
 
