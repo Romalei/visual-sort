@@ -3,6 +3,7 @@
   --secondary: rgb(72 193 120);
   --accent: rgb(0 117 255);
   --iteratee: rgb(240, 37, 132);
+  --pivot: rgb(255, 196, 0);
 
   --shadow: 0 8px 30px rgb(0 0 0 / 0.15);
 
@@ -57,6 +58,7 @@ body {
 
 /* Array */
 .array {
+  position: relative;
   display: flex;
   align-items: flex-start;
   height: 100%;
@@ -77,6 +79,10 @@ body {
 
 .array__item_iteratee {
   background-color: var(--iteratee);
+}
+
+.array__item_pivot {
+  background-color: var(--pivot);
 }
 
 .array__item_sorted {
@@ -147,4 +153,15 @@ button:disabled {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Other */
+.horizontal-ruler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px dashed var(--pivot);
 }

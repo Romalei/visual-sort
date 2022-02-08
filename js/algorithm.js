@@ -1,6 +1,9 @@
 class SortAlgorithm {
-  constructor(name) {
+  constructor(name, { interval, pauseWhen, breakWhen } = {}) {
     this.name = name;
+    this.interval = interval;
+    this.isPaused = pauseWhen;
+    this.shouldBreak = breakWhen;
   }
 
   swap(arr, a, b) {
@@ -11,22 +14,16 @@ class SortAlgorithm {
     arr[a].swapWith(arr[b]);
   }
 
-  reset(...arrayItems) {
-    for (let i = 0; i < arrayItems.length; i++) {
-      arrayItems[i].setStatus(ARRAY_ITEM_STATUS.IDLE);
-    }
-  }
-
-  async delay(time) {
+  async delay() {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(), time);
+      setTimeout(() => resolve(), this.interval());
     });
   }
 
-  async waitWhile(isPaused) {
+  async waitWhile() {
     return new Promise((resolve) => {
       const interval = setInterval(() => {
-        if (!isPaused()) {
+        if (!this.isPaused()) {
           clearInterval(interval);
           resolve();
         }
@@ -36,22 +33,22 @@ class SortAlgorithm {
 }
 
 class BubbleSort extends SortAlgorithm {
-  constructor() {
-    super('Bubble Sort');
+  constructor(config) {
+    super('Bubble Sort', config);
   }
 
-  async sort(arr, { interval, pauseWhen: isPaused, breakWhen: shouldBreak }) {
+  async sort(arr) {
     for (let i = 0, n = arr.length; i < n - 1; ++i) {
       for (let j = 0; j < n - i - 1; ++j) {
-        arr[j].setStatus(ARRAY_ITEM_STATUS.ITERATEE);
+        arr[j].markAsIteratee();
 
-        if (isPaused()) {
-          await this.waitWhile(isPaused);
+        if (this.isPaused()) {
+          await this.waitWhile();
         }
 
-        await this.delay(interval());
+        await this.delay();
 
-        if (shouldBreak()) {
+        if (this.shouldBreak()) {
           return;
         }
 
@@ -59,19 +56,93 @@ class BubbleSort extends SortAlgorithm {
           this.swap(arr, j, j + 1);
         }
 
-        this.reset(arr[j], arr[j + 1]);
+        arr[j].markAsIdle();
+        arr[j + 1].markAsIdle();
       }
 
-      arr[n - i - 1].setStatus(ARRAY_ITEM_STATUS.SORTED);
+      arr[n - i - 1].markAsSorted();
     }
 
-    arr[0].setStatus(ARRAY_ITEM_STATUS.SORTED);
+    arr[0].markAsSorted();
   }
 }
 
 class QuickSort extends SortAlgorithm {
-  constructor() {
-    super('Quick Sort');
+  constructor(config) {
+    super('Quick Sort', config);
+    this.hrs = [];
+  }
+
+  async sort(arr, low = 0, high = arr.length - 1) {
+    if (low < high) {
+      /* pi is partitioning index, arr[pi] is now
+           at right place */
+      const pi = await this.partition(arr, low, high);
+
+      arr[pi].markAsSorted();
+      arr[low].markAsSorted();
+      arr[high].markAsSorted();
+
+      await this.sort(arr, low, pi - 1); // Before pi
+      await this.sort(arr, pi + 1, high); // After pi
+    }
+
+    this.destroyHorizontalRulers();
+  }
+
+  async partition(arr, low, high) {
+    // pivot (Element to be placed at right position)
+    const pivot = arr[high];
+    pivot.markAsPivot();
+
+    this.destroyHorizontalRulers();
+    this.createHorizontalRuler(pivot.element.parentElement, (pivot.value * 95) / STATE.maxValue + 5);
+
+    let i = low - 1; // Index of smaller element and indicates the
+    // right position of pivot found so far
+
+    for (let j = low; j <= high - 1; j++) {
+      arr[j].markAsIteratee();
+
+      if (this.isPaused()) {
+        await this.waitWhile();
+      }
+
+      await this.delay();
+
+      if (this.shouldBreak()) {
+        return;
+      }
+
+      // If current element is smaller than the pivot
+      if (arr[j].value < pivot.value) {
+        arr[j].markAsIdle();
+
+        i++; // increment index of smaller element
+        this.swap(arr, i, j);
+      } else {
+        arr[j].markAsIdle();
+      }
+    }
+
+    this.swap(arr, i + 1, high);
+
+    return i + 1;
+  }
+
+  createHorizontalRuler(container, y) {
+    const hr = document.createElement('hr');
+    this.hrs.push(hr);
+
+    hr.className = 'horizontal-ruler';
+    hr.style.setProperty('top', `${y}%`);
+    container.appendChild(hr);
+  }
+
+  destroyHorizontalRulers() {
+    while (this.hrs.length) {
+      this.hrs.pop().remove();
+    }
   }
 }
 

@@ -2,12 +2,14 @@ const ARRAY_ITEM_STATUS = {
   IDLE: 1,
   ITERATEE: 2,
   SORTED: 3,
+  PIVOT: 4,
 };
 
 const STATUS_CLASS_MAP = {
   [ARRAY_ITEM_STATUS.IDLE]: [],
   [ARRAY_ITEM_STATUS.ITERATEE]: ['array__item_iteratee'],
   [ARRAY_ITEM_STATUS.SORTED]: ['array__item_sorted'],
+  [ARRAY_ITEM_STATUS.PIVOT]: ['array__item_pivot'],
 };
 
 class ArrayItem {
@@ -35,6 +37,22 @@ class ArrayItem {
     }
 
     this.container.appendChild(this.element);
+  }
+
+  markAsSorted() {
+    this.setStatus(ARRAY_ITEM_STATUS.SORTED);
+  }
+
+  markAsIdle() {
+    this.setStatus(ARRAY_ITEM_STATUS.IDLE);
+  }
+
+  markAsIteratee() {
+    this.setStatus(ARRAY_ITEM_STATUS.ITERATEE);
+  }
+
+  markAsPivot() {
+    this.setStatus(ARRAY_ITEM_STATUS.PIVOT);
   }
 
   swapWith(item) {

@@ -8,9 +8,9 @@ const $$ = document.querySelectorAll.bind(document);
 const $id = document.getElementById.bind(document);
 
 const ALGS = {
-  1: new BubbleSort(),
-  //   2: new QuickSort(),
-  //   3: new HeapSort(),
+  1: BubbleSort,
+  2: QuickSort,
+  //   3: HeapSort,
 };
 
 // Toolbar controls
@@ -164,13 +164,13 @@ async function start() {
   STATE.sortInProgress = true;
 
   const algId = ALG_SELECTOR.value;
-  const alg = ALGS[algId];
-
-  await alg.sort(STATE.array, {
+  const alg = new ALGS[algId]({
     interval: () => 1000 / STATE.speed.value,
     pauseWhen: () => STATE.paused,
     breakWhen: () => !STATE.sortInProgress,
   });
+
+  await alg.sort(STATE.array);
 
   stop();
 }
