@@ -2,7 +2,7 @@
 
 As you can understand by the name of the repository, this is a UI visualization of sorting algorithms. Here is the list of them:
 - Bubble sort ✅
-- Quick Sort (📝 TODO)
+- Quick Sort ✅
 - Heap Sort (📝 TODO)
 - Selection Sort (📝 TODO)
 - Others?
