@@ -1,3 +1,5 @@
+const { IDLE, PIVOT, SELECTED, ITERATEE, SORTED } = ARRAY_ITEM_STATUS;
+
 class SortAlgorithm {
   constructor(name, { interval, pauseWhen, breakWhen } = {}) {
     this.name = name;
@@ -40,7 +42,7 @@ class BubbleSort extends SortAlgorithm {
   async sort(arr) {
     for (let i = 0, n = arr.length; i < n - 1; ++i) {
       for (let j = 0; j < n - i - 1; ++j) {
-        arr[j].markAsIteratee();
+        arr[j].setStatus(ITERATEE);
 
         if (this.isPaused()) {
           await this.waitWhile();
@@ -56,14 +58,14 @@ class BubbleSort extends SortAlgorithm {
           this.swap(arr, j, j + 1);
         }
 
-        arr[j].markAsIdle();
-        arr[j + 1].markAsIdle();
+        arr[j].setStatus(IDLE);
+        arr[j + 1].setStatus(IDLE);
       }
 
-      arr[n - i - 1].markAsSorted();
+      arr[n - i - 1].setStatus(SORTED);
     }
 
-    arr[0].markAsSorted();
+    arr[0].setStatus(SORTED);
   }
 }
 
@@ -79,9 +81,9 @@ class QuickSort extends SortAlgorithm {
            at right place */
       const pi = await this.partition(arr, low, high);
 
-      arr[pi].markAsSorted();
-      arr[low].markAsSorted();
-      arr[high].markAsSorted();
+      arr[pi].setStatus(SORTED);
+      arr[low].setStatus(SORTED);
+      arr[high].setStatus(SORTED);
 
       await this.sort(arr, low, pi - 1); // Before pi
       await this.sort(arr, pi + 1, high); // After pi
@@ -93,16 +95,19 @@ class QuickSort extends SortAlgorithm {
   async partition(arr, low, high) {
     // pivot (Element to be placed at right position)
     const pivot = arr[high];
-    pivot.markAsPivot();
+    pivot.setStatus(PIVOT);
 
     this.destroyHorizontalRulers();
-    this.createHorizontalRuler(pivot.element.parentElement, (pivot.value * 95) / STATE.maxValue + 5);
+    this.createHorizontalRuler(
+      pivot.element.parentElement,
+      (pivot.value * 95) / STATE.maxValue + 5
+    );
 
     let i = low - 1; // Index of smaller element and indicates the
     // right position of pivot found so far
 
-    for (let j = low; j <= high - 1; j++) {
-      arr[j].markAsIteratee();
+    for (let j = low; j <= high - 1; ++j) {
+      arr[j].setStatus(ITERATEE);
 
       if (this.isPaused()) {
         await this.waitWhile();
@@ -116,12 +121,14 @@ class QuickSort extends SortAlgorithm {
 
       // If current element is smaller than the pivot
       if (arr[j].value < pivot.value) {
-        arr[j].markAsIdle();
+        arr[j].setStatus(IDLE);
 
-        i++; // increment index of smaller element
+        ++i; // increment index of smaller elemente
         this.swap(arr, i, j);
+
+        arr[i].setStatus(SELECTED);
       } else {
-        arr[j].markAsIdle();
+        arr[j].setStatus(IDLE);
       }
     }
 

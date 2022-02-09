@@ -28,7 +28,7 @@ const ARRAY_CONTAINER = $id('array_container');
 const STATE = {
   minLength: 5,
   maxLength: 100,
-  arrayLength: 50,
+  arrayLength: 100,
   sortInProgress: false,
   array: [],
   minValue: 0,

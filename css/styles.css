@@ -3,7 +3,8 @@
   --secondary: rgb(72 193 120);
   --accent: rgb(0 117 255);
   --iteratee: rgb(240, 37, 132);
-  --pivot: rgb(255, 196, 0);
+  --pivot: rgb(0, 0, 0);
+  --selected: rgb(255, 196, 0);
 
   --shadow: 0 8px 30px rgb(0 0 0 / 0.15);
 
@@ -79,6 +80,10 @@ body {
 
 .array__item_iteratee {
   background-color: var(--iteratee);
+}
+
+.array__item_selected {
+  background-color: var(--selected);
 }
 
 .array__item_pivot {

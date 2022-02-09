@@ -3,6 +3,7 @@ const ARRAY_ITEM_STATUS = {
   ITERATEE: 2,
   SORTED: 3,
   PIVOT: 4,
+  SELECTED: 5,
 };
 
 const STATUS_CLASS_MAP = {
@@ -10,6 +11,7 @@ const STATUS_CLASS_MAP = {
   [ARRAY_ITEM_STATUS.ITERATEE]: ['array__item_iteratee'],
   [ARRAY_ITEM_STATUS.SORTED]: ['array__item_sorted'],
   [ARRAY_ITEM_STATUS.PIVOT]: ['array__item_pivot'],
+  [ARRAY_ITEM_STATUS.SELECTED]: ['array__item_selected'],
 };
 
 class ArrayItem {
@@ -37,22 +39,6 @@ class ArrayItem {
     }
 
     this.container.appendChild(this.element);
-  }
-
-  markAsSorted() {
-    this.setStatus(ARRAY_ITEM_STATUS.SORTED);
-  }
-
-  markAsIdle() {
-    this.setStatus(ARRAY_ITEM_STATUS.IDLE);
-  }
-
-  markAsIteratee() {
-    this.setStatus(ARRAY_ITEM_STATUS.ITERATEE);
-  }
-
-  markAsPivot() {
-    this.setStatus(ARRAY_ITEM_STATUS.PIVOT);
   }
 
   swapWith(item) {
